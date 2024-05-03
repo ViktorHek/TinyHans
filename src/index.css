@@ -104,6 +104,18 @@ body {
   border-left: 2px solid rgb(114, 111, 111);
   border-top: 2px solid rgb(114, 111, 111);
 }
+
+.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: grey;
+  flex-direction: column;
+  margin: 0 2px 2px 2px;
+  max-height: 500px;
+  /* overflow: scroll; */
+}
+
 .btn-active {
   color: rgb(10, 69, 69);
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
@@ -368,19 +380,6 @@ body {
   border-bottom: 2px solid rgb(57, 56, 56);
   border-left: 2px solid rgb(114, 111, 111);
   border-top: 2px solid rgb(114, 111, 111);
-}
-
-.box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: grey;
-
-  flex-direction: column;
-  margin: 0 2px 2px 2px;
-
-  max-height: 500px;
-  /* overflow: scroll; */
 }
 
 .editor-backgrond2 {

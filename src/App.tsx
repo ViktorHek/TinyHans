@@ -1,6 +1,10 @@
 import Toolbar from "./components/Toolbar";
+import HandleEditorFocus from "./funk/HandleEditorFucus";
+
 
 function App() {
+  const { ref, isEditorFocused, setIsEditorFocused } = HandleEditorFocus(true);
+
   return (
     <div className="app-container">
       <div className="app-inner-container">
@@ -16,7 +20,9 @@ function App() {
         </div>
         <div
           id="box"
-          className="box">
+          ref={ref}
+          onClick={() => setIsEditorFocused(true)}
+          className={`${isEditorFocused ? "box-active " : ""} box`}>
           <Toolbar />
           <div
             className="editor-backgrond"
