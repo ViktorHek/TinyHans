@@ -26,25 +26,20 @@ function handleKeys(event: KeyboardEvent, styles: letterStyle[]) {
 
   switch (dir) {
     case `key${dir.slice(-1)}`:
+      const letterTag: HTMLElement = document.createElement("p");
+      styles.forEach((el) => {
+        letterTag.style[el.type] = el.val;
+      });
+      letterTag.innerHTML = dir.replace("key", "");
       if (placeholder.parentElement?.className === "space") {
-        let tag: HTMLElement = document.createElement("span");
+        const tag: HTMLElement = document.createElement("span");
         placeholder.parentElement.insertAdjacentElement("afterend", tag);
         placeholder.remove();
-        let letterTag: HTMLElement = document.createElement("p");
-        styles.forEach((el) => {
-          letterTag.style[el.type] = el.val;
-        });
-        letterTag.innerHTML = dir.replace("key", "");
         tag.appendChild(letterTag);
         tag.appendChild(nph);
       } else {
-        let tag: HTMLElement = document.createElement("p");
-        tag.innerText = dir.replace("key", "");
-        styles.forEach((el) => {
-          tag.style[el.type] = el.val;
-        });
         if (placeholder) {
-          placeholder.insertAdjacentElement("beforebegin", tag);
+          placeholder.insertAdjacentElement("beforebegin", letterTag);
         }
       }
       break;
@@ -91,7 +86,7 @@ function handleKeys(event: KeyboardEvent, styles: letterStyle[]) {
       break;
     case "enter":
       let line = document.createElement("span");
-      line.innerHTML = '<span><p></p><p class="placeholder" id="placeholder"></p></span>';
+      line.innerHTML = '<span><p class="placeholder" id="placeholder"></p></span>';
       placeholder.parentElement.parentElement.insertAdjacentElement("afterend", line);
       placeholder.remove();
       break;

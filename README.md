@@ -48,11 +48,7 @@ Det första span-elementet agerar som en rad, den andra som ett ord och den sist
 
 När bokstäver skrivs så injecerar jag dem till vänster om vart placeholder-elementet är. Om ett mellanslag används så läggs det till ett "ord-span-element" till höger om där placeholder-elementet är. Slutligen, om man klickar "enter" så skapas ett nytt "rad-span-element" under positionen av placeholder-elementet. 
 
-### App.tsx
-
-Den här filen är huvudkomponenten. Alla inputs, element och funktioner går genom app komponenten.
-
-#### HandleEditorFocus
+### HandleEditorFocus
 
 Det första vi ser är <HandleEditorFocus>. Det är en "custom hook" som registrerar om användaren har klickat innuti editor rutan eller utanför. Funktionen används för att avgöra om användaren har avtiverat editorn eller inte. Då iden är att använda den här editorn i kontexten av en hemsida så vill jag inte att den ska ta in några kanjent inputs tills den vet att användaren vill skiva i editorn.
 
@@ -64,7 +60,7 @@ isEditorFocused: är en boolean som visar om editorn är aktiv eller inte. den �
 
 setIsEditorFocused: är en setter som sätter värdet på isEditorFocused variabeln.
 
-#### clickOut
+### clickOut
 
 clickOut är en funktion som används för att byta vart i texten du skriver genom att klicka på den delen av texten du vill ändra. Funktionen är aktiverad genom ett mouse-down event. 
 Eventet skickas med i funktionen. De första raderna av if-statements är till för att bara kalla på funktionen om användaren klickar innuti editorn. Funktionen skapar en ny placeholder och tar bort den gammla. Om användaren klickar någonstans i texten så kommer en förälder komponenterna att vara editorn. Annars betyder det att användaren har klickar innuti editorn, men utanför texten. 
@@ -72,13 +68,13 @@ Om användaren klickar på texten så kommer den nya placeholdern sättas där a
 Om användaren klickar innuti editorn med utanför texten, så kommer den nya placeholdern att plaseras i stutet av texten. 
 Anledningen till varför är för att text är skirven från toppen neråt. Vilket innebär att om en användare klickar utanför texten så måste personen klicka någonstans under texten. därför, oavsätt horisontell positionering av klicket, så anser jag att det är mest användarvänligt att börja från slutet.
 
-#### useKeys
+### useKeys
 
 UseKeys är yttligare en custom-hook. Den används för att registrera alla kanjentinputs. Det finns en event listerner som lyssnar efter kanjenter som trycks ner och när de åker upp igen. funktionen använder sig av useEffect. 
 Jag använder mig av event.preventDefault() för att säkerhetställa att jag har full kontroll över funktioneliteten av applicationen. vissa tanjenter har funktionaqlitet utöver att skriva ord. då jag inte har koll på alla dessa olika funktioner så vill jag inte riskera aqtt någon går snätt sm ett resultat av de funktionerna.
 Om isEditorFocused är lika med false så betyder det att editorn inte är aktiv och därför ska inte tanjentinput registreras. <arrowKeys> är en array av keyCode vadet för alla olika pil-tanjenter man kan välja mellan. Då dessa tanjenter navigerar texten och alla andra tanjenter ändrar texten så valde jag att separera funktionerna med en if-statment. 
 
-#### movePlaceholder
+### movePlaceholder
 
 Funktioner är till för att ändra positionen på placholdern ett steg framåt eller ett steg bakot. I funktionen så börjar vi med att hitta den nuvarande placeholdern och skapar en ny. Den första sekvensen av if-statements är till för att undvika ett specefikt fall. Vilket är att du inte kan gå bakot om du nyss har skrivit ett mellanslag och är i slutet av texten. Därför kollar jag efter det specifica senariot. Jag börjar med att verifiera att sista bokstaven på sista ordet i sista raden är placeholder-elementet, sen kollar jag om "bokstavs-span-elementet" innehåller programeringsspråks koden för mellanslag och om användaren vill gå bakot i texten. I det fallet så ska placeholdern placeras i slutet på det tidiagre ordet för att kunna separera element med ord från element med mellanslag.
 
@@ -97,4 +93,52 @@ följande if-statement avgör om placeholdern är i början eller i slutet av et
 Om något av fallen stämmer så går funktionen vidare till else delen. först säkerställs att placeholder-elementet inte är det fösta eller sista elementet i texten. Efter det kontroleras att det finns ett element brevid plaveholderns förälder-element i den riktning som användaren vill navigera till. Om det finns så blir variablent target till placeholderns förälderelements syskons-elements barn. Om placeholderns förälderelement inte har något syskon i den riktningen som användaren vill navigera till så betyder det att nästa bokstav finns på en ny rad, då vi redan säkerhetställt att placeholder-elementet inte är i början eller slutet av texten. Om det är fallet så blir target variablent placeholderns förälders förälders syskon-elements barnbarn. 
 Funktionen avslutas med att den tidigare placeholden tas bort. Detta måste göras i slutet då vi använder elementet som referenspunk för vart man ska placera den nya placeholdern. 
 
+### HTML 
 
+HTML koden är det man ser så fort man öppnat applikationen i webläsaren. Man kan dela in det i fyra delar: 
+
+- Kontainer
+
+Används som en ram för resten av komponenten. Designen är starkt inspirerad av Windows 3. 
+
+- Header
+
+Används primärt som en titel för editorn. Det finns två knappar på editorn som idag inte fyller någon funktion utöver design. Ideén är att knappen till vänster ska minimera applicationen och knappen till höger ska stänga applicationen. Knapparna har ingen funktion i nuläget då iden är att applicationen ska integreras i en annan kodbas.
+
+- Toolbar
+
+Används för att addera yttligare funktionalitet genom knappar man klickar på. Genom att klicka på knappen "bold" så gör du texten du skriver bold tills det att du klickar på knappen igen.
+
+- Editor
+
+Används för att visa hur texten användaren har skrivit kommer se ut om man exporterar det. Själva editorn är div-elementet med id="editor". Det är här som alla nya element kommer att bli placerade. Det första span-elementet är den fösta raden. Det andra span-elementet är det första ordet. Det tredje span-elementet är placeholden, den indikarar vart i texten användaren skriver. 
+
+### handleKeys
+
+HandleKeys är en funktion som kallas på varje gång användaren klickar på en tanjent medan ediotorn är aktiv. Det finns två argument i funktionen: event och styles.
+
+- Event är ett keydown-event. hela eventet skickas med, men det är bara key-coden som vi är ute efter.
+- Styles är en array av stilinstälningar. En inställning är ett objekt med variablerna type och val. Type definerar vilket attribut som ska ändras och val definerar vad attributet ska ändras till. 
+
+Jag börjar med att skapa en variabel för att spara värdet för key code värdet som tanjenen motsvarar. Efter det skapar jag variabler för det nuvarnade placeholder-elementet och för editorn. Om något av dessa vaiabler saknar ett värde som kommer funktionen att avbrytas.
+
+När allt är på platts så skapas ett nytt placeholder-element, identist till det förra. Efter kommer ett stort switch statement som kollar efter fyra saker. 
+
+Includerar key-coden "key" följt av endast ett tecken:
+I detta fall så vet jag att tanjenten som användaren har klickat är en bokstav. Ett nytt element skapas i en variabel som kallas <letterTag>. Det görs en loop på alla stil-attribut som ska ändras och ändringarna appliseras direkt på elementet. Värdet på elementet sätts till key-coden som är associerad till tanjenten som användaren klickade. 
+Ord som inkluderar bokstäver och ord som inkluderar mellanrum ska vara separerade. Därför är första kollen om placeholder-elementet är placerat i ett ord-span-element som är dedikerat till mellanrum eller inte.
+Om placeholder-elementet befinner sig i ett mellanrums-ord så skapas ett nytt element som placeras efter placeholderns förälderelement. Efter detta så tas det första placeholder-elementet bort. Det nyligen skapta elementet blir sedan populerat med värdet från "letterTag", följt av det nya placeholder elementet.
+Om placeholder-elementet inte befinner sig i ett mellanrums-ord så läggs det nya bokstavselementet in precis innan placeholder-elementet.
+
+"space":
+När en användare klickar på mellanslags knappen så kollar jag först om det finns något element till höger om placeholder-elementet. Om det stämmer så vet jag att placeholdern inte är i slutet av texten. 
+ordet som placeholdern befinner sig i blir sedan uppdelat i två olika ord med ett mellanrum mitt emellan. Jag loopar alla tecken i ordet och omplacerar dem i det första ordet. tills jag kommer till placeholder elementet, då bytts det och alla tecken efter plaseras i det andra ordet. En temporär tag skapas som referensepunkt. Taggarna placeras i relation till referensepunkten i följande ordning: 
+firstWord -> mellanrum -> secondWord.
+Det nya placeholder-elementet är hårdkodat in i mellenrums-elementet. Därför kan man med självförtroende ta bort både ordet där det tidigare placeholder-elementet var placerat och det temporära elementet. 
+Om det däremot inte finns något element till höger om placeholder-elementet så skpas ett nytt mellanrum med en placeholder i sig och det förra placeholder-elementet tas bort. 
+
+"enter"
+När en användare klickar enter så skapas ett nytt element. Det elementet representerar en ny rad och har därför ett ord och en placeholder hårdkodad i sig. Den nya raden plaseras efter raden som placeholder-elementet är på och sen försvinner det tidigare placeholder-elementet.
+
+"backspace"
+De första raderna är bara till för att avsluta funktionen om editorn inte existerar eller inte är populerad. Efter görs en kontroll om det finns något element till vänster om placeholder-elementet. Om så är fallet så tar vi bort elementet till vänster om placeholder-elementet. Annars går vi vidare och kollar om ordet som placeholder-elementet är plaserad i har ett element till vänster om sig. I så fall måste vi först lägga in det nya placeholder-elementet innan vi tar bort det gammla placeholder-elementet, då vi använder det elementet som en referansepunkt. Om det inte finns något ord till vänster om elementet som placeholder-elementet är plaserat i så görs samma process fast med närligande rad istället för ord. 
