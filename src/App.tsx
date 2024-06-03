@@ -1,29 +1,154 @@
 import Toolbar from "./components/Toolbar";
 import HandleEditorFocus from "./funk/HandleEditorFucus";
 import useKeys from "./funk/use-keys";
+import { useEffect, useState } from "react";
+import { letterStyle } from "./utils/interface";
+import handleKeys from "./funk/handleKeys";
+
 
 function App() {
   const { ref, isEditorFocused, setIsEditorFocused } = HandleEditorFocus(true);
+  // const [boldActive, setBoldActive] = useState(false);
+  // const [italicActive, setItalicActive] = useState(false);
+  // const [pos, setPos] = useState("left");
+  const arrowKeys: string[] = ["ArrowRight", "ArrowLeft"];
 
-  useKeys((event: React.KeyboardEvent<HTMLElement>): void => {
+  useEffect(() => {
+    window.addEventListener("mousedown", clickOut);
+    return () => {
+      window.removeEventListener("mousedown", clickOut);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useKeys((event: KeyboardEvent): void => {
     event.preventDefault();
     if (!isEditorFocused) return;
-    handleKeys(event);
+    if (arrowKeys.includes(event.code)) {
+      movePlaceholder('left');
+      // movePlaceholder(event.code.replace("Arrow", "").toLowerCase());
+    } else {
+      handleKeys(event, []);
+      // handleKeys(event, getStyle());
+    }
   });
 
-  function handleKeys(event: React.KeyboardEvent<HTMLElement>): void {
-    const dir = event.code.toLowerCase();
-    if (dir.length !== 4) return
-    const placeholder: HTMLElement | null = document.getElementById("placeholder");
+  function movePlaceholder(where: string) {
+    const editor: HTMLElement | null = document.getElementById("editor");
+    let placeholder: any = document.getElementById("placeholder");
+    if (!placeholder) {
+      // placeholder = document.createElement("p")
+      // placeholder.id = "placeholder";
+      // placeholder.className = "placeholder";
+      // editor?.lastChild?.lastChild?.appendChild(placeholder)
+      console.log('no placeholder found')
+      return
+    }
     const newPlaceHolder: HTMLElement = document.createElement("p");
-    const tag: HTMLElement = document.createElement("p");
     newPlaceHolder.id = "placeholder";
     newPlaceHolder.className = "placeholder";
-    tag.innerText = dir.replace("key", "");
-    if (placeholder) {
-      placeholder.insertAdjacentElement("beforebegin", tag);
+
+    if (editor?.lastElementChild?.lastElementChild?.lastElementChild?.id === "placeholder") {
+      if (placeholder?.previousElementSibling.innerHTML === "&nbsp;" && where === "left") {
+        if (placeholder.parentElement?.previousElementSibling) {
+          placeholder.parentElement.previousElementSibling.appendChild(newPlaceHolder);
+          placeholder.remove();
+          return;
+        }
+      }
+    }
+    // if (!placeholder.parentElement?.children) return
+    const siblings: HTMLElement[] = Array.from(placeholder.parentElement.children);
+    const currentIndex: number = siblings.indexOf(placeholder);
+    const sibling: "previousElementSibling" | "nextElementSibling" = where === "left" ? "previousElementSibling" : "nextElementSibling";
+    const child: "lastChild" | "firstChild" = where === "left" ? "lastChild" : "firstChild";
+    const ajust: "beforebegin" | "afterend" = where === "left" ? "beforebegin" : "afterend";
+    const isInit = currentIndex === 0 && where === "left";
+    const isWordStart = currentIndex === 1 && where === "left";
+    const isWordEnd = currentIndex === siblings.length - 1 && where === "right";
+    if (!isWordStart && !isWordEnd && !isInit) {
+      if (placeholder[sibling]) {
+        placeholder[sibling].insertAdjacentElement(ajust, newPlaceHolder);
+        placeholder.remove();
+      }
+    } else {
+      const firstSibling: any = editor?.firstChild?.firstChild?.firstChild?.nextSibling
+      const lastEl: any = editor?.lastChild?.lastChild?.lastChild;
+      if (firstSibling?.id === "placeholder" || lastEl.id === "placeholder") {
+        return;
+      }
+      const target: any = placeholder.parentElement[sibling] ? placeholder.parentElement[sibling][child] : placeholder?.parentElement?.parentElement[sibling][child][child];
+      target.insertAdjacentElement("afterend", newPlaceHolder);
+      placeholder.remove();
+
     }
   }
+
+  function clickOut(event: any) {
+    if (!isEditorFocused) return;
+    if (!document.getElementById("placeholder")) return;
+    // if (event?.target?.parentElement === null) return;
+    // if (event.target.parentElement.parentElement === null) return;
+    if (event?.target?.parentElement?.parentElement?.parentElement === null) return;
+    if (
+      event.target.parentElement.parentElement.parentElement?.id === "editor" ||
+      // event.target.parentElement.parentElement.id === "editor" ||
+      // event.target.parentElement.id === "editor" ||
+      event.target.id !== "editorbackground"
+    ) {
+      const tag: HTMLElement = document.createElement("p");
+      const placeholder = document.getElementById("placeholder");
+      tag.id = "placeholder";
+      tag.className = "placeholder";
+      console.log({ event });
+      if (event.target.parentElement.parentElement.parentElement.id === "editor") {
+        event.target.insertAdjacentElement("afterend", tag);
+      } else {
+        const editor = document.getElementById("editor");
+        editor?.lastChild?.lastChild?.appendChild(tag);
+      }
+      placeholder?.remove();
+
+    }
+  }
+
+  // function getStyle() {
+  //   let arr: letterStyle[] = [];
+  //   if (italicActive) {
+  //     arr.push({ type: "fontStyle", val: "italic" });
+  //   }
+  //   if (boldActive) {
+  //     arr.push({ type: "fontWeight", val: "bold" });
+  //   }
+  //   return arr;
+  // }
+
+  function changePos(type: string) {
+    // setPos(type);
+    const ph: any = document.getElementById("placeholder");
+    switch (type) {
+      case "left":
+        ph.parentElement.parentElement.style.justifyContent = "flex-start";
+        break;
+      case "center":
+        ph.parentElement.parentElement.style.justifyContent = "center";
+        break;
+      case "right":
+        ph.parentElement.parentElement.style.justifyContent = "flex-end";
+        break;
+      case "strech":
+        ph.parentElement.parentElement.style.justifyContent = "space-evenly";
+        break;
+      default:
+        break;
+    }
+  }
+
+
+
+
+
+
 
   return (
     <div className="app-container">

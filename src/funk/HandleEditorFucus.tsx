@@ -4,10 +4,7 @@ function HandleEditorFocus(init: boolean) {
   const [isEditorFocused, setIsEditorFocused] = useState(init)
   const ref = useRef<any>(null)
   function handleClickOutsideEditor(event: any): void {
-
-    console.log('wehe')
     if (ref.current && !ref.current.contains(event.target)) {
-      console.log('wehe2')
       setIsEditorFocused(false)
     }
   }
