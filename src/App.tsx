@@ -8,10 +8,10 @@ import handleKeys from "./funk/handleKeys";
 
 function App() {
   const { ref, isEditorFocused, setIsEditorFocused } = HandleEditorFocus(true);
-  // const [boldActive, setBoldActive] = useState(false);
-  // const [italicActive, setItalicActive] = useState(false);
-  // const [pos, setPos] = useState("left");
-  const arrowKeys: string[] = ["ArrowRight", "ArrowLeft"];
+  const [boldActive, setBoldActive] = useState(false);
+  const [italicActive, setItalicActive] = useState(false);
+  const [pos, setPos] = useState("left");
+  const arrowKeys: string[] = ["ArrowRight", "ArrowLeft", "ArrowUp", "ArrowDown"];
 
   useEffect(() => {
     window.addEventListener("mousedown", clickOut);
@@ -22,32 +22,21 @@ function App() {
   }, []);
 
   useKeys((event: KeyboardEvent): void => {
-    event.preventDefault();
+    event.preventDefault(); console.log(event.code);
     if (!isEditorFocused) return;
     if (arrowKeys.includes(event.code)) {
-      movePlaceholder('left');
-      // movePlaceholder(event.code.replace("Arrow", "").toLowerCase());
+      movePlaceholder(event.code.replace("Arrow", "").toLowerCase());
     } else {
-      handleKeys(event, []);
-      // handleKeys(event, getStyle());
+      handleKeys(event, getStyle());
     }
   });
 
   function movePlaceholder(where: string) {
     const editor: HTMLElement | null = document.getElementById("editor");
-    let placeholder: any = document.getElementById("placeholder");
-    if (!placeholder) {
-      // placeholder = document.createElement("p")
-      // placeholder.id = "placeholder";
-      // placeholder.className = "placeholder";
-      // editor?.lastChild?.lastChild?.appendChild(placeholder)
-      console.log('no placeholder found')
-      return
-    }
+    let placeholder: any = document.getElementById("placeholder") ? document.getElementById("placeholder") : editor?.lastChild?.lastChild?.lastChild;
     const newPlaceHolder: HTMLElement = document.createElement("p");
     newPlaceHolder.id = "placeholder";
     newPlaceHolder.className = "placeholder";
-
     if (editor?.lastElementChild?.lastElementChild?.lastElementChild?.id === "placeholder") {
       if (placeholder?.previousElementSibling.innerHTML === "&nbsp;" && where === "left") {
         if (placeholder.parentElement?.previousElementSibling) {
@@ -57,7 +46,6 @@ function App() {
         }
       }
     }
-    // if (!placeholder.parentElement?.children) return
     const siblings: HTMLElement[] = Array.from(placeholder.parentElement.children);
     const currentIndex: number = siblings.indexOf(placeholder);
     const sibling: "previousElementSibling" | "nextElementSibling" = where === "left" ? "previousElementSibling" : "nextElementSibling";
@@ -87,13 +75,13 @@ function App() {
   function clickOut(event: any) {
     if (!isEditorFocused) return;
     if (!document.getElementById("placeholder")) return;
-    // if (event?.target?.parentElement === null) return;
-    // if (event.target.parentElement.parentElement === null) return;
+    if (event?.target?.parentElement === null) return;
+    if (event.target.parentElement.parentElement === null) return;
     if (event?.target?.parentElement?.parentElement?.parentElement === null) return;
     if (
       event.target.parentElement.parentElement.parentElement?.id === "editor" ||
-      // event.target.parentElement.parentElement.id === "editor" ||
-      // event.target.parentElement.id === "editor" ||
+      event.target.parentElement.parentElement.id === "editor" ||
+      event.target.parentElement.id === "editor" ||
       event.target.id !== "editorbackground"
     ) {
       const tag: HTMLElement = document.createElement("p");
@@ -108,23 +96,22 @@ function App() {
         editor?.lastChild?.lastChild?.appendChild(tag);
       }
       placeholder?.remove();
-
     }
   }
 
-  // function getStyle() {
-  //   let arr: letterStyle[] = [];
-  //   if (italicActive) {
-  //     arr.push({ type: "fontStyle", val: "italic" });
-  //   }
-  //   if (boldActive) {
-  //     arr.push({ type: "fontWeight", val: "bold" });
-  //   }
-  //   return arr;
-  // }
+  function getStyle() {
+    let arr: letterStyle[] = [];
+    if (italicActive) {
+      arr.push({ type: "fontStyle", val: "italic" });
+    }
+    if (boldActive) {
+      arr.push({ type: "fontWeight", val: "bold" });
+    }
+    return arr;
+  }
 
   function changePos(type: string) {
-    // setPos(type);
+    setPos(type);
     const ph: any = document.getElementById("placeholder");
     switch (type) {
       case "left":
@@ -144,11 +131,14 @@ function App() {
     }
   }
 
-
-
-
-
-
+  function handleStyle(val: string) {
+    if (val === 'bold') {
+      setBoldActive(!boldActive);
+    };
+    if (val === 'italic') {
+      setItalicActive(!italicActive)
+    }
+  }
 
   return (
     <div className="app-container">
@@ -168,7 +158,7 @@ function App() {
           ref={ref}
           onClick={() => setIsEditorFocused(true)}
           className={`${isEditorFocused ? "box-active " : ""} box`}>
-          <Toolbar />
+          <Toolbar pos={pos} handleChangePos={changePos} handleStyle={handleStyle} />
           <div
             className="editor-backgrond"
             id="editorbackground">

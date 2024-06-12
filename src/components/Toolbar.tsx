@@ -1,11 +1,17 @@
 import { useState } from "react";
 import AlignAnimation from "./AlignAnimation";
 
-function Toolbar() {
+function Toolbar(
+  props: { 
+    pos: string, 
+    handleChangePos: (pos: string) => void, 
+    handleStyle: (val: string) => void 
+  }
+) {
   const [openPositionDropdown, setOpenPositionDropdown] = useState(false);
-  const [pos, setPos] = useState('left');
 
   function handleOpenDropdown(type: string) {
+    return
     if (type === "pos") {
       setOpenPositionDropdown(!openPositionDropdown);
     }
@@ -15,7 +21,11 @@ function Toolbar() {
     if (openPositionDropdown) {
       setOpenPositionDropdown(!openPositionDropdown);
     }
-    setPos(pos);
+    props.handleChangePos(pos)
+  }
+
+  function handleStyle(val: string) {
+    props.handleStyle(val)
   }
 
   return (
@@ -31,11 +41,14 @@ function Toolbar() {
         <div
           id="bold"
           className="btn"
+          onClick={() => handleStyle('bold')}
         >
           <strong>B</strong>
         </div>
         <div
-          id="italic" className="btn"
+          id="italic"
+          className="btn"
+          onClick={() => handleStyle('italic')}
         >
           <p style={{ fontStyle: "italic" }}>I</p>
         </div>
@@ -61,7 +74,7 @@ function Toolbar() {
               </div>
             ) : (
               <div style={{ height: "18px", width: "18px" }}>
-                <AlignAnimation type={pos} />
+                <AlignAnimation type={props.pos} />
               </div>
             )}
             <span className="arrow-down"></span></div>

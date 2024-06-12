@@ -142,3 +142,21 @@ När en användare klickar enter så skapas ett nytt element. Det elementet repr
 
 "backspace"
 De första raderna är bara till för att avsluta funktionen om editorn inte existerar eller inte är populerad. Efter görs en kontroll om det finns något element till vänster om placeholder-elementet. Om så är fallet så tar vi bort elementet till vänster om placeholder-elementet. Annars går vi vidare och kollar om ordet som placeholder-elementet är plaserad i har ett element till vänster om sig. I så fall måste vi först lägga in det nya placeholder-elementet innan vi tar bort det gammla placeholder-elementet, då vi använder det elementet som en referansepunkt. Om det inte finns något ord till vänster om elementet som placeholder-elementet är plaserat i så görs samma process fast med närligande rad istället för ord. 
+
+## Framtida Förbättringar
+
+När det kommer till funktionalitet som jag vill implementera så använder jag TinyMCE som mall. Målet är att återskapa alla funktioner som finns i TinyMCE. Med det sagt så finns det vissa saker som jag prioriterar över andra. 
+
+  - Möjligheten att markera en text och editera den markerade texten.
+Med markera text så menar jag att men klickar med musen på en text, håller ner och drar musen den längs texten och släpper när markeringen är klar. Det finns en global funktion i Typescript som retunerar de element som användaren har markerat. Jag har en potensiell lösning till den här funktionaliteten. Man kan sätta temporära element där markeringen börjar och slutar. Sen loopar man igenom hela texten tills man kommer till det första temporära elementet. Alla efterliggande element ändras utefter hur användaren vill ha det. Tills man kommer till det andra temporära elementet, då slutar man ändra texten och avslutar funktionen. 
+
+  - Lägga till font och storlek.
+Funktionen att ändra storleken på fonten kommer vara samma som funktionen för att göra fonten "bold". Problemet är att ändra font. planen med hela applikationen är att man ska kunna expotera texten man har skrivit så som den ser ut. Jag vet inte vilka fonter som används på alla typer av plattformar. Till exempel, jag vet att man kan lägga till "Times New Roman" på en p-tag i alla olika typer av webläsare, men jag vet inte om det funkar att exporterar texten i ett mail.
+
+  - Göra applikationen till en självständig komponent som enkelt kan integreras i andra projekt.
+Den här punken borde egentligen vara uppdelad i flera steg men det finns två saker som jag anser krävs för att funktionaliteten ska räknas som färdig
+- Skapa en responsive design där editorn har lika stor höjd och brädd som fönstret den existerar i.
+- skapa en funktion som kan kallas från en förälderkomponent som tar innerHTML värdet från editorn så att det kan exporteras. 
+
+Fixa buggar
+  - När en användare 

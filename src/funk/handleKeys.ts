@@ -1,14 +1,3 @@
-// import { toBePartiallyChecked } from "@testing-library/jest-dom/matchers";
-// import appendTag from "./appendTag";
-
-// const specialKeys = ["space", "backspace", "enter"];
-// const arrowKeys = ["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft"];
-
-// arr.push({ type: "fontStyle", val: "italic" });
-// }
-// if (boldActive) {
-//   arr.push({ type: "fontWeight", val: "bold" });
-
 import { letterStyle } from "../utils/interface";
 
 function handleKeys(event: KeyboardEvent, styles: letterStyle[]) {
@@ -19,10 +8,6 @@ function handleKeys(event: KeyboardEvent, styles: letterStyle[]) {
   const nph: HTMLElement = document.createElement("p");
   nph.id = "placeholder";
   nph.className = "placeholder";
-  // nph.class = "placeholder";
-  // nph.name = "placeholder";
-
-  // const nph: HTMLSpanElement = `<span id="placeholder" className="placeholder"></span>`
 
   switch (dir) {
     case `key${dir.slice(-1)}`:
@@ -85,6 +70,7 @@ function handleKeys(event: KeyboardEvent, styles: letterStyle[]) {
       }
       break;
     case "enter":
+    case "digit1": // for texting
       let line = document.createElement("span");
       line.innerHTML = '<span><p class="placeholder" id="placeholder"></p></span>';
       placeholder.parentElement.parentElement.insertAdjacentElement("afterend", line);

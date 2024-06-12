@@ -207,12 +207,6 @@ function AlignAnimation({ type }: { type: string }) {
       break;
   }
   return <>{html}</>
-  // return SVGs[type]
-  // if(options.includes(type)){
-  // } else {
-  //   return <>?</>
-  // }
-
 }
 
 export default AlignAnimation;

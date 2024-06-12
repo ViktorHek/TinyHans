@@ -21,42 +21,6 @@ body {
   padding: 2px;
 }
 
-.btn {
-  height: 26px;
-  width: 26px;
-  background-color: #7b7e79;
-  border: 1px solid black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  border-right: 2px solid rgb(105, 106, 104);
-  border-bottom: 2px solid rgb(105, 106, 104);
-  border-top: 2px solid #c1d2b5;
-  border-left: 2px solid #c1d2b5;
-  transition: 0.3s;
-  cursor: pointer;
-}
-
-.btn-dropdown {
-  justify-content: space-between;
-  width: 45px;
-  padding: 0px 5px;
-  align-items: center;
-  height: 26px;
-  transition: height 0.3s ease;
-}
-
-.btn-dropdown-open {
-  height: 100px;
-  justify-content: flex-end;
-  width: 45px;
-  padding: 0px 5px;
-  align-items: center;
-  transition: 0.3s;
-  overflow: hidden;
-}
-
 .arrow-down {
   border-right: 2px solid black;
   border-bottom: 2px solid black;
@@ -179,17 +143,6 @@ body {
   background-color: whitesmoke;
   border: 1px solid whitesmoke;
 }
-
-/* .header-container {
-  background-color: #080099;
-  border: 1px solid black;
-  height: 30px;
-  max-width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-} */
 
 .header-min-btn > span {
   height: 5px;
@@ -361,7 +314,6 @@ body {
   height: 26px;
   width: 26px;
   background-color: #7b7e79;
-  /* border: 1px solid black; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -404,7 +356,7 @@ body {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin: 2px 2px 0px 2px;
+  /* margin: 2px 2px 0px 2px; */
 }
 
 .header-min-btn > span {
@@ -445,6 +397,26 @@ body {
   height: 3px;
   width: 10px;
 }
+
+.btn-dropdown {
+  justify-content: space-between;
+  width: 35px;
+  padding: 0px 5px;
+  align-items: center;
+  height: 26px;
+  transition: height 0.3s ease;
+}
+
+.btn-dropdown-open {
+  height: 100px;
+  justify-content: flex-end;
+  width: 45px;
+  padding: 0px 5px;
+  align-items: center;
+  transition: 0.3s;
+  overflow: hidden;
+}
+
 
 @keyframes blink-animation {
   0% {
